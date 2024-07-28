@@ -7,4 +7,7 @@ package singleLinkList;
  * @Date 2024/7/28 10:45
  */
 public class SingleLinkListDemo {
+    public static void main(String[] args) {
+
+    }
 }
