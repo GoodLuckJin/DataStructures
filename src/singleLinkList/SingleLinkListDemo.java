@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * 单向链表-
+ *
  * @ClassName SingleLinkList
  * @Author zhao jin
  * @Date 2024/7/28 10:45
@@ -12,53 +13,98 @@ import java.util.List;
 public class SingleLinkListDemo {
 
     public static void main(String[] args) {
-            Node<User> node1 = new Node<>(1,new User("马云"));
-            Node<User> node2 = new Node<>(2,new User("马化腾"));
-            Node<User> node3 = new Node<>(3,new User("刘强东"));
-            Node<User> node4 = new Node<>(4,new User("雷军"));
+        Node<User> node1 = new Node<>(1, new User("马云"));
+        Node<User> node2 = new Node<>(2, new User("马化腾"));
+        Node<User> node3 = new Node<>(3, new User("刘强东"));
+        Node<User> node4 = new Node<>(4, new User("雷军"));
 
         SingleLinkList singleLinkList = new SingleLinkList();
-        singleLinkList.add(node1);
-        singleLinkList.add(node2);
+
+        //无序添加
+        /*singleLinkList.add(node1);
         singleLinkList.add(node3);
         singleLinkList.add(node4);
+        singleLinkList.add(node2);*/
+
+        //有序添加
+        singleLinkList.addByOrder(node1);
+        singleLinkList.addByOrder(node3);
+        singleLinkList.addByOrder(node4);
+        singleLinkList.addByOrder(node2);
+
         singleLinkList.showList();
     }
 
 
 }
-class SingleLinkList{
-    //头部node
-    Node headNode = new Node(0,"");
 
-    public void add(Node node){
-        Node tempNode =headNode;
-        while (true){
-            if(null == tempNode.getNext()){
+class SingleLinkList {
+    //头部node
+    Node headNode = new Node(0, "");
+
+    public void add(Node node) {
+        Node tempNode = headNode;
+        while (true) {
+            if (null == tempNode.getNext()) {
                 break;
             }
-            tempNode=tempNode.getNext();
+            tempNode = tempNode.getNext();
         }
         tempNode.setNext(node);
     }
-    public void showList(){
-        if(null == headNode.getNext()){
+
+    /**
+     * 按顺序add
+     *
+     * @Author jjjson
+     * @Date 2024/7/28 13:15
+     */
+    public void addByOrder(Node newNode) {
+        Node tempNode = headNode;
+        //是否允许添加
+        boolean flag = Boolean.FALSE;
+        while (true) {
+            if (null == tempNode.getNext()) {
+                break;
+            }
+            if (tempNode.getNext().getIndex() > newNode.getIndex()) {
+                //找到插入坐标，在tempNode后面
+                break;
+            } else if (tempNode.getNext().getIndex() == newNode.getIndex()) {
+                //插入序号存在冲突
+                flag = Boolean.TRUE;
+                break;
+            }
+            //后移坐标
+            tempNode = tempNode.getNext();
+        }
+        if (flag) {
+            System.out.println("存在相同序号的数据，不能添加");
+        } else {
+            newNode.setNext(tempNode.getNext());
+            tempNode.setNext(newNode);
+        }
+
+    }
+
+    public void showList() {
+        if (null == headNode.getNext()) {
             System.out.println("链表为空");
             return;
         }
-        Node tempNode =headNode.getNext();
-        while (true){
-            if(tempNode==null){
+        Node tempNode = headNode.getNext();
+        while (true) {
+            if (tempNode == null) {
                 break;
             }
             System.out.println(tempNode);
-            tempNode=tempNode.getNext();
+            tempNode = tempNode.getNext();
         }
     }
 }
 
 
-class  Node<T>{
+class Node<T> {
     //指针
     private int index;
     //下一个
@@ -66,12 +112,12 @@ class  Node<T>{
     //数据变量
     private T t;
 
-    public Node(int index,T t){
-        this.index=index;
-        this.t=t;
+    public Node(int index, T t) {
+        this.index = index;
+        this.t = t;
     }
 
-    public Node(){
+    public Node() {
         super();
     }
 
@@ -104,12 +150,14 @@ class  Node<T>{
 class User extends Node {
     private String name;
 
-    public User(String name){
-        this.name=name;
+    public User(String name) {
+        this.name = name;
     }
-    public User(){
+
+    public User() {
         super();
     }
+
     public String getName() {
         return name;
     }
