@@ -32,7 +32,7 @@ public class Node<T> {
         return "Node{" +
                 "index=" + index +
                 ", t=" + t +
-                '}'+"  pre : {"+pre.getT()+"}"+"  next : {"+ (Objects.nonNull(next)?next.getT():null)+"}";
+                '}'+"  pre : {"+(Objects.nonNull(pre)?pre.getT():null)+"}"+"  next : {"+ (Objects.nonNull(next)?next.getT():null)+"}";
     }
 
     public int getIndex() {
