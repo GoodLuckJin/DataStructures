@@ -14,7 +14,7 @@ public class Calculator {
     }
 
     public static void main(String[] args) {
-        String expression = "9+1+2*6-2";
+        String expression = "70+2*6-4";
         //创建两个栈，数栈，符号栈
         CalculatorStack numStack = new CalculatorStack(10);
         CalculatorStack operStack = new CalculatorStack(10);
@@ -26,6 +26,8 @@ public class Calculator {
         int res = 0;
         //扫描的结果存放
         char ch = ' ';
+        //拼接字段
+        StringBuilder keepNum = new StringBuilder();
         while (true) {
             ch = expression.substring(index, index + 1).charAt(0);
             //是否计算符
@@ -53,7 +55,19 @@ public class Calculator {
             } else {
                 //如果是数栈，则入数栈
                 //char 1的十进制=49 ascii码
-                numStack.push(ch - 48);
+                //numStack.push(ch - 48);
+                //1.处理数时需要需要判断是否是多位数
+                //2.判断后几位是否是计算法，否则需要拼接数字
+                keepNum.append(ch);
+                if (index == expression.length() - 1) {
+                    numStack.push(Integer.parseInt(keepNum.toString()));
+                } else {
+                    if (operStack.isOper(expression.substring(index + 1, index + 2).charAt(0))) {
+                        numStack.push(Integer.parseInt(keepNum.toString()));
+                        keepNum = new StringBuilder();
+                    }
+                }
+
             }
             //判断是否最好一条数据，跳出循环
             index++;
@@ -189,8 +203,10 @@ class CalculatorStack {
                 break;
             case '-':
                 res = num2 - num1;
+                break;
             case '*':
                 res = num1 * num2;
+                break;
             case '/':
                 return num2 / num1;
             default:
